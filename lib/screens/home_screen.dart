@@ -67,7 +67,11 @@ class _HomeScreen extends State<HomeScreen> {
         onPressed: () {
           print('you create project');
         },
-        child: const Icon(Icons.add),
+        backgroundColor: Colors.blueAccent,
+        child: const Icon(
+          Icons.add,
+          color: Colors.white70,
+        ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
