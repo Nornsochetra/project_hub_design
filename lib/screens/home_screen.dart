@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:project_hub_design/screens/profile_screen.dart';
 import 'package:project_hub_design/widgets/tabBar_home_screen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -29,29 +30,46 @@ class _HomeScreen extends State<HomeScreen> {
                   ),
                 )
             ),
-            Container(
-              width: 50.0,
-              height: 50.0,
-              decoration: const BoxDecoration(
-                shape: BoxShape.circle,
-                image: DecorationImage(
-                  image: const AssetImage('assets/images/oggy.jpg'),
-                  fit: BoxFit.cover,
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => const ProfileScreen(),
+                  ),
+                );
+              },
+              child: Container(
+                width: 50.0,
+                height: 50.0,
+                decoration: const BoxDecoration(
+                  shape: BoxShape.circle,
+                  image: DecorationImage(
+                    image: AssetImage('assets/images/oggy.jpg'),
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
-            )
+            ),
           ],
         ),
       ),
       body: DefaultTabController(
         length: 4,
         child: Column(
-          children: const [
-            SizedBox(height: 15),
-            Expanded(child: TabBarHomeScreen()),
+          children: [
+            const SizedBox(height: 15),
+            const Expanded(child: TabBarHomeScreen()),
           ],
         ),
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          print('you create project');
+        },
+        child: const Icon(Icons.add),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
   }
 }
