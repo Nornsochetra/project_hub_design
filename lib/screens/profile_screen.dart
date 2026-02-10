@@ -15,6 +15,8 @@ class _State extends State<ProfileScreen> {
     super.initState();
   }
 
+  int chetraLevel = 0;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,6 +30,19 @@ class _State extends State<ProfileScreen> {
         ),
         backgroundColor: Colors.lightBlue[800],
         centerTitle: true,
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          setState(() {
+            chetraLevel += 1;
+            if (chetraLevel > 10){
+              chetraLevel = 1;
+            }
+          });
+        },
+        backgroundColor: Colors.blueAccent[700],
+        foregroundColor: Colors.white70,
+        child: Icon(Icons.add),
       ),
       body: Padding(
         padding: EdgeInsets.fromLTRB(30.0, 40.0, 30.0, 0.0),
@@ -75,7 +90,7 @@ class _State extends State<ProfileScreen> {
             ),
             SizedBox(height: 10.0),
             Text(
-              '5',
+              '$chetraLevel',
               style: TextStyle(
                   color: Colors.lightBlue[700],
                   fontSize: 24,
@@ -88,13 +103,13 @@ class _State extends State<ProfileScreen> {
               children: [
                 Icon(
                   Icons.email,
-                  color: Colors.grey[400],
+                  color: Colors.grey[600],
                 ),
                 SizedBox(width: 10.0),
                 Text(
                   'nornsochetra@gmail.com',
                   style: TextStyle(
-                    color: Colors.grey[500],
+                    color: Colors.grey[600],
                     fontSize: 14,
                     fontWeight: .w500,
                     letterSpacing: 2.0
@@ -107,13 +122,13 @@ class _State extends State<ProfileScreen> {
               children: [
                 Icon(
                   Icons.phone_enabled,
-                  color: Colors.grey[400],
+                  color: Colors.grey[600],
                 ),
                 SizedBox(width: 10.0),
                 Text(
                   '098796787',
                   style: TextStyle(
-                      color: Colors.grey[500],
+                      color: Colors.grey[600],
                       fontSize: 14,
                       fontWeight: .w500,
                       letterSpacing: 2.0

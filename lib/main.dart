@@ -1,8 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:project_hub_design/screens/home_screen.dart';
+import 'package:project_hub_design/viewmodels/project_view_model.dart';
+import 'package:provider/provider.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    ChangeNotifierProvider(
+      create: (_) => ProjectViewModel(),
+      child: const MyApp(),
+    )
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -14,6 +21,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       home: HomeScreen(),
+      routes: {
+
+      },
     );
   }
 }

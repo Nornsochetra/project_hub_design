@@ -1,12 +1,37 @@
 import 'package:flutter/material.dart';
+import 'package:project_hub_design/viewmodels/project_view_model.dart';
 import 'package:project_hub_design/widgets/card_home_screen.dart';
 import 'package:project_hub_design/widgets/overview_home_screen.dart';
+import 'package:provider/provider.dart';
+import '../models/project.dart';
+import 'package:intl/intl.dart';
 
-class TabBarHomeScreen extends StatelessWidget {
+class TabBarHomeScreen extends StatefulWidget {
   const TabBarHomeScreen({super.key});
 
   @override
+  State<TabBarHomeScreen> createState() => _TabBarHomeScreenState();
+}
+
+class _TabBarHomeScreenState extends State<TabBarHomeScreen> {
+
+  @override
+  void initState() {
+    super.initState();
+
+    Future.microtask((){
+      context.read<ProjectViewModel>().getAllProjects();
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final projectVm = context.watch<ProjectViewModel>();
     final controller = DefaultTabController.of(context);
 
     return Column(
@@ -49,38 +74,66 @@ class TabBarHomeScreen extends StatelessWidget {
         Expanded(
           child: TabBarView(
             children: [
+              //  Tab 1: All Projects (Overview + cards loop)
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 12),
-                child: ListView(
-                  children: const [
-                    // You can other customer view here
-                    OverviewHomeScreen(
-                        title: 'Record Daily Attendance',
-                        dateText: 'Oct 07',
-                        progress: 0.35,
-                        members: [
-                          AssetImage('assets/images/oggy.jpg'),
-                          AssetImage('assets/images/oggy.jpg'),
-                          AssetImage('assets/images/oggy.jpg'),
-                          AssetImage('assets/images/oggy.jpg'),
-                        ]
-                    ),
-                    SizedBox(height: 12),
-                    CardHomeScreen(
-                        title: 'Record Daily Attendance',
-                        dateText: 'Oct 07',
-                        progress: 0.35,
-                        status: 'Completed'
-                    )
-                  ],
+                child: ListView.builder(
+                  itemCount: projectVm.project.length + 1,
+                  itemBuilder: (context, index) {
+                    if (index == 0) {
+                      return Column(
+                        children: [
+                          OverviewHomeScreen(
+                            title: 'Record Daily Attendance',
+                            dateText: DateTime(2026,10,1),
+                            progress: 0.35,
+                            members: const [
+                              AssetImage('assets/images/oggy.jpg'),
+                              AssetImage('assets/images/oggy.jpg'),
+                              AssetImage('assets/images/oggy.jpg'),
+                              AssetImage('assets/images/oggy.jpg'),
+                            ],
+                          ),
+                          const SizedBox(height: 12),
+                        ],
+                      );
+                    }
+
+                    final project = projectVm.project[index - 1];
+                    return Padding(
+                      padding: const EdgeInsets.only(bottom: 12),
+                      child: CardHomeScreen(
+                        project: project,
+                        onDelete: () => projectVm.deleteProjectById(project.id),
+                      ),
+                    );
+                  },
                 ),
               ),
-              Center(child: Text('Active')),
-              Center(child: Text('Pending')),
-              Center(child: Text('Completed')),
+
+              // Tab 2: Active
+              _ProjectList(
+                projects: projectVm.project
+                    .where((p) => p.status == StatusProject.active)
+                    .toList(),
+              ),
+
+              // Tab 3: Pending
+              _ProjectList(
+                projects: projectVm.project
+                    .where((p) => p.status == StatusProject.pending)
+                    .toList(),
+              ),
+
+              // Tab 4: Completed
+              _ProjectList(
+                projects: projectVm.project
+                    .where((p) => p.status == StatusProject.completed)
+                    .toList(),
+              ),
             ],
           ),
-        ),
+        )
       ],
     );
   }
@@ -129,6 +182,35 @@ class _TabWithUnderline extends StatelessWidget {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class _ProjectList extends StatelessWidget {
+  final List<Project> projects;
+
+  const _ProjectList({
+    required this.projects,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final projectVm = context.watch<ProjectViewModel>();
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 12),
+      child: ListView.builder(
+        itemCount: projects.length,
+        itemBuilder: (context, index) {
+          final p = projects[index];
+          return Padding(
+            padding: const EdgeInsets.only(bottom: 12),
+            child: CardHomeScreen(
+              project: p,
+              onDelete: () => projectVm.deleteProjectById(p.id),
+            ),
+          );
+        },
       ),
     );
   }

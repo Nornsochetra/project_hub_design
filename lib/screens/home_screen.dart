@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:project_hub_design/screens/profile_screen.dart';
+import 'package:project_hub_design/widgets/create_project.dart';
 import 'package:project_hub_design/widgets/tabBar_home_screen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -65,7 +66,10 @@ class _HomeScreen extends State<HomeScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          print('you create project');
+          Navigator.push(
+              context,
+            MaterialPageRoute(builder: (_) => const CreateProjectForm())
+          );
         },
         backgroundColor: Colors.blueAccent,
         child: const Icon(

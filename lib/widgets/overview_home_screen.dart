@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class OverviewHomeScreen extends StatelessWidget {
   final String title;
-  final String dateText; // e.g. "Dec 15"
+  final DateTime dateText; // e.g. "Dec 15"
   final double progress; // 0.0 - 1.0
   final List<ImageProvider> members;
 
@@ -17,6 +18,7 @@ class OverviewHomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final percent = (progress * 100).round();
+    var formatDate = DateFormat('MMM dd').format(dateText);
 
     return Container(
       width: double.infinity,
@@ -47,7 +49,7 @@ class OverviewHomeScreen extends StatelessWidget {
             top: 4,
             right: 10,
             child: Text(
-              dateText,
+              formatDate,
               style: TextStyle(
                 color: Colors.white.withOpacity(0.85),
                 fontWeight: FontWeight.w600,
